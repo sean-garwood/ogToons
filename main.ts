@@ -26,6 +26,7 @@ console.log(cards[0].name);
 // Let's generate two random decks
 const DECKSIZE = 12;
 
+// Debugging
 function generateRandomDeck() {
     const deck = [];
     for (let i = 0; i < DECKSIZE; i++) {
@@ -34,19 +35,21 @@ function generateRandomDeck() {
     return deck;
 }
 
+// TODO: shuffle each deck
+
 const deck1 = generateRandomDeck();
 const deck2 = generateRandomDeck();
 
-// Start the game!
+// Cut Phase
 
+// The bottom card of each deck is revealed.
+// pluck a card
 function pluck(deck: Card[]) {
     const randomIndex = Math.floor(Math.random() * deck.length);
     return deck[randomIndex];
 }
 
-// Cut Phase
-
-// The bottom card of each deck is revealed.
+// TODO: put it on the __bottom__ of the deck
 
 const bottomCard1 = deck1[deck1.length - 1];
 const bottomCard2 = deck2[deck2.length - 1];
@@ -54,27 +57,22 @@ const bottomCard2 = deck2[deck2.length - 1];
 console.log('Player 1 reveals', bottomCard1.name);
 console.log('Player 2 reveals', bottomCard2.name);
 
+// TODO: color cut logic
 // we need to determine the colors of the game
 
 // colors is an array that has zero to two members
 
 // REMEMBER: SILVER and BLACK are null colors; they can't be used to determine the color of the game
 
-// check first card
-// check second card
-
-
-
-function getColors(deck1: Card[], deck2: Card[]) {
-    const color1 = deck1[deck1.length - 1].color;
-    const color2 = deck2[deck2.length - 1].color;
-
-    console.log('Color 1:', color1);
-    console.log('Color 2:', color2);
-
-}
-
 // TODO: color cut logic
 
-const colors = getColors(deck1, deck2);
-console.log('Colors:', colors);
+// Play Phase
+
+// each player draws a hand of six cards
+// the decks have already been shuffled and the card order should be determined, with deck[-1] being the bottom card
+
+const drawTopCard = (deck: Card[]) => deck.shift();
+
+// draw a card for testing
+console.log(drawTopCard(deck1));
+// turn 1
