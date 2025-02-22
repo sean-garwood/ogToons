@@ -71,8 +71,31 @@ console.log('Player 2 reveals', bottomCard2.name);
 // each player draws a hand of six cards
 // the decks have already been shuffled and the card order should be determined, with deck[-1] being the bottom card
 
-const drawTopCard = (deck: Card[]) => deck.shift();
+function drawTopCard(deck: Card[]): Card {
+    const card = deck.shift();
+    if (!card) {
+        throw new Error("The deck is empty, cannot draw a card.");
+    }
+    return card;
+}
 
 // draw a card for testing
 console.log(drawTopCard(deck1));
-// turn 1
+
+function drawHand(deck: Card[]) {
+    const hand = [];
+    for (let i = 0; i < 6; i++) {
+        hand.push(drawTopCard(deck));
+    }
+    return hand;
+}
+
+const hand1 = drawHand(deck1);
+const hand2 = drawHand(deck2);
+for (let i = 0; i < 6; i++) {
+    console.log('Player 1 draws', hand1[i].name);
+    console.log('Player 2 draws', hand2[i].name);
+}
+
+console.log('Player 1 hand', hand1);
+console.log('Player 2 hand', hand2);
