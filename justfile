@@ -1,5 +1,5 @@
 run: build
-    node main
+    node src/main
 
 build:
     tsc

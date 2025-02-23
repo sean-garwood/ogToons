@@ -1,4 +1,4 @@
-import * as cards from './cards.json';
+import * as cards from '../cards.json';
 class Student {
   fullName: string;
   constructor(
