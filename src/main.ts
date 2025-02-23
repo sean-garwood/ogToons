@@ -1,24 +1,63 @@
-import * as cards from '../cards.json';
-class Student {
-  fullName: string;
-  constructor(
-    public firstName: string,
-    public middleInitial: string,
-    public lastName: string
-  ) {
-    this.fullName = firstName + " " + middleInitial + " " + lastName;
-  }
-}
-
 class Player {
-  constructor(
-    public name: string,
-    public deck: Card[],
-    public hand: Card[],
-    public row1: Card[],
-    public row2: Card[],
-  ) {
-  }
+    row1: Card[];
+    row2: Card[];
+    hand: Card[];
+
+    constructor(
+        public name: string,
+        public deck: Card[],
+    ) {
+        this.row1 = [];
+        this.row2 = [];
+        this.hand = [];
+    }
+
+    toString() {
+        let deck = this.deck.map(card => card.name).join(', ');
+        let hand = this.hand.map(card => card.name).join(', ');
+        let row1 = this.row1.map(card => card.name).join(', ');
+        let row2 = this.row2.map(card => card.name).join(', ');
+        return `${this.name}:\n\tDeck: ${deck}\n\tHand: ${hand}\n\tRow 1: ${row1}\n\tRow 2: ${row2}`;
+    }
+
+    fillHand() {
+        this.hand.push(...this.deck.splice(0, 6-this.hand.length));
+    }
+
+    bottomCard(): Card {
+        return this.deck[this.deck.length - 1];
+    }
+
+    drawTopCard(deckOrHand: Card[]): Card {
+        const card = deckOrHand.shift();
+        if (!card) {
+            throw new Error("The deck is empty, cannot draw a card.");
+        }
+        return card;
+    }
+
+    playRow1() {
+        for (let i = 0; i < 4; i++) {
+            this.row1.push(this.drawTopCard(this.hand));
+        }
+    }
+
+    discard() {
+        // TODO: Randomly discarding for now to simulate the discard phase
+        let discardRandom = (hand: Card[]) => {
+            const numDiscards = Math.floor(Math.random() * 3);
+            for (let i = 0; i < numDiscards; i++) {
+                hand.shift();
+            }
+        }
+        discardRandom(this.hand);
+    }
+
+    playRow2() {
+        for (let i = 0; i < 3; i++) {
+            this.row2.push(this.drawTopCard(this.hand));
+        }
+    }
 }
 
 class Card {
@@ -33,11 +72,12 @@ class Card {
   }
 }
 
-// Now we have all the cards
+
+// Load all cards
+import * as cards from '../cards.json';
 
 // Let's generate two random decks
 const DECKSIZE = 12;
-
 function generateRandomDeck() {
     const deck = [];
     for (let i = 0; i < DECKSIZE; i++) {
@@ -45,20 +85,21 @@ function generateRandomDeck() {
     }
     return deck;
 }
-const deck1 = generateRandomDeck();
-const deck2 = generateRandomDeck();
+
+console.log("-------------------- Game Start --------------------");
+let player1 = new Player('Player 1', generateRandomDeck());
+let player2 = new Player('Player 2', generateRandomDeck());
+console.log(player1.toString());
+console.log(player2.toString());
 
 // TODO: shuffle each player's deck
 
 // Cut Phase
+console.log("-------------------- Cut! --------------------");
 
 // The bottom card of each deck is revealed.
-const bottomCard1 = deck1[deck1.length - 1];
-const bottomCard2 = deck2[deck2.length - 1];
-console.log('Player 1 reveals', bottomCard1.name);
-console.log('Player 2 reveals', bottomCard2.name);
-
-console.log(deck1.length, deck2.length);
+console.log('Player 1 reveals', player1.bottomCard().name);
+console.log('Player 2 reveals', player2.bottomCard().name);
 
 // TODO: color cut logic
 // we need to determine the colors of the game
@@ -70,80 +111,65 @@ console.log(deck1.length, deck2.length);
 // TODO: color cut logic
 
 // Play Phase
+console.log("-------------------- Turn 1! --------------------");
 
 // each player draws a hand of six cards
 // the decks have already been shuffled and the card order should be determined, with deck[-1] being the bottom card
 
-function drawTopCard(deckOrHand: Card[]): Card {
-    const card = deckOrHand.shift();
-    if (!card) {
-        throw new Error("The deck is empty, cannot draw a card.");
-    }
-    return card;
-}
+// function drawHand(deck: Card[]) {
+//     const hand = [];
+//     for (let i = 0; i < 6; i++) {
+//         hand.push(drawTopCard(deck));
+//     }
+//     return hand;
+// }
 
-function drawHand(deck: Card[]) {
-    const hand = [];
-    for (let i = 0; i < 6; i++) {
-        hand.push(drawTopCard(deck));
-    }
-    return hand;
-}
+// player1.hand = drawHand(player1.deck);
+// player2.hand = drawHand(player2.deck);
+player1.fillHand();
+player2.fillHand();
 
-const hand1 = drawHand(deck1);
-const hand2 = drawHand(deck2);
-console.log('Player 1 draws');
-hand1.forEach(card => console.log(card.name));
-console.log('Player 2 draws');
-hand2.forEach(card => console.log(card.name));
+console.log(player1.toString());
+console.log(player2.toString());
 
 // turn 1 begins
 
 // each player places four cards onto the board. (the board has two sides, with two rows each: the first, or top, row has four slots, the latter has three.)
 // order will matter!
 
-const player1row1: Card[] = [];
-const player2row1: Card[] = [];
-
 // let's place the first four cards
-for (let i = 0; i < 4; i++) {
-    player1row1.push(drawTopCard(hand1));
-    player2row1.push(drawTopCard(hand2));
-}
-console.log('Player 1 row 1');
-player1row1.forEach(card => console.log(card.name));
-console.log('Player 2 row 1');
-player2row1.forEach(card => console.log(card.name));
+player1.playRow1();
+player2.playRow1();
+console.log(player1.toString());
+console.log(player2.toString());
 
 // TODO: Resolve turn 1
 
-// TODO: Discard phase
+
+// Discard phase
 // Players can discard up to two cards from their hand
+player1.discard();
+player2.discard();
 
-// for debugging
-function discardRandom(hand: Card[]) {
-    const numDiscards = Math.floor(Math.random() * 3);
-    for (let i = 0; i < numDiscards; i++) {
-        hand.shift();
-    }
-}
-discardRandom(hand1);
-discardRandom(hand2);
-
-console.log(deck1.length, deck2.length);
-console.log(hand1.length, hand2.length);
-
-// Draw cards so each player again has six in their hand
-function fillHand(hand: Card[], deck: Card[]) {
-    hand.push(...deck.splice(0, 6-hand.length));
-}
-fillHand(hand1, deck1);
-fillHand(hand2, deck2);
-
-console.log('Player 1 hand:');
-hand1.forEach(card => console.log(card.name));
-
-console.log('Player 2 hand:');
-hand2.forEach(card => console.log(card.name));
 
 // Phase 2
+console.log("-------------------- Turn 2! --------------------");
+
+// Draw cards so each player again has six in their hand
+player1.fillHand();
+player2.fillHand();
+
+console.log(player1.toString());
+console.log(player2.toString());
+
+player1.playRow2();
+player2.playRow2();
+
+console.log(player1.toString());
+console.log(player2.toString());
+
+// TODO: End the game
+// The first two cards are revealed
+// Each player is then given the option to swap their last card with one of the three remaining cards in their own hand, at the cost of ten points
+// Then, the players choose the color for their silver cards in play
+// Then, once everything is resolved, the winner is determined.
