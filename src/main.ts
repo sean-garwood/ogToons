@@ -105,10 +105,8 @@ console.log('Player 2 reveals', player2.bottomCard().name);
 // we need to determine the colors of the game
 
 // colors is an array that has zero to two members
-
-// REMEMBER: SILVER and BLACK are null colors; they can't be used to determine the color of the game
-
-// TODO: color cut logic
+// REMEMBER: SILVER and BLACK are null colors; they can't be used to determine
+// the color of the game
 
 // Play Phase
 console.log("-------------------- Turn 1! --------------------");

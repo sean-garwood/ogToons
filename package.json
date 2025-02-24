@@ -1,4 +1,9 @@
 {
+  "name": "ogtoons",
+  "description": "Open-source remake of gToons",
+  "scripts": {
+    "todos": "./scripts/todos.sh"
+  },
   "devDependencies": {
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
