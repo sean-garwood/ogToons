@@ -1,11 +1,13 @@
 {
-  "name": "ogtoons",
-  "description": "Open-source remake of gToons",
-  "scripts": {
-    "todos": "./scripts/todos.sh"
-  },
-  "devDependencies": {
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
-  }
+    "name": "ogtoons",
+    "description": "Open-source remake of gToons",
+    "scripts": {
+        "todos": "./scripts/todos.sh",
+        "fmt": "prettier --write \"src/**/*.ts\""
+    },
+    "devDependencies": {
+        "prettier": "^3.5.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.3"
+    }
 }

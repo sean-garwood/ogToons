@@ -11,7 +11,7 @@ function generateRandomDeck() {
     return deck;
 }
 
-console.log("-------------------- Game Start --------------------");
+console.log('-------------------- Game Start --------------------');
 let player1 = new Player('Player 1', generateRandomDeck());
 let player2 = new Player('Player 2', generateRandomDeck());
 console.log(player1.toString());
@@ -20,7 +20,7 @@ console.log(player2.toString());
 // TODO: shuffle each player's deck
 
 // Cut Phase
-console.log("-------------------- Cut! --------------------");
+console.log('-------------------- Cut! --------------------');
 
 // The bottom card of each deck is revealed.
 console.log('Player 1 reveals', player1.bottomCard().name);
@@ -34,7 +34,7 @@ console.log('Player 2 reveals', player2.bottomCard().name);
 // the color of the game
 
 // Play Phase
-console.log("-------------------- Turn 1! --------------------");
+console.log('-------------------- Turn 1! --------------------');
 
 // each player draws a hand of six cards
 // the decks have already been shuffled and the card order should be determined, with deck[-1] being the bottom card
@@ -68,15 +68,13 @@ console.log(player2.toString());
 
 // TODO: Resolve turn 1
 
-
 // Discard phase
 // Players can discard up to two cards from their hand
 player1.discard();
 player2.discard();
 
-
 // Phase 2
-console.log("-------------------- Turn 2! --------------------");
+console.log('-------------------- Turn 2! --------------------');
 
 // Draw cards so each player again has six in their hand
 player1.fillHand();
