@@ -1,12 +1,22 @@
+import { cardData } from './cards.js';
+import { Card } from './classes/Card';
 import { Player } from './classes/Player';
-import * as cards from '../cards.json';
 
 // Let's generate two random decks
 const DECKSIZE = 12;
-function generateRandomDeck() {
-    const deck = [];
+
+function makeCards(): Card[] {
+    return cardData.map(
+        (card: any) => new Card(card.name, card.color, card.points),
+    );
+}
+
+function generateRandomDeck(): Card[] {
+    const deck: Card[] = [];
+    const cards: Card[] = makeCards();
     for (let i = 0; i < DECKSIZE; i++) {
-        deck.push(cards[Math.floor(Math.random() * cards.length)]);
+        const thisCard = cards[Math.floor(Math.random() * cards.length)];
+        deck.push(thisCard);
     }
     return deck;
 }

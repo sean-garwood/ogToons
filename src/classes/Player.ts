@@ -43,9 +43,20 @@ class Player {
         }
     }
 
+    scoreRow(row: number): number {
+        const rowArray = row === 1 ? this.row1 : this.row2;
+        let score = 0;
+
+        for (const card of rowArray) {
+            score += card.points;
+        }
+
+        return score;
+    }
+
     toString() {
         const fprint = (cards: Card[]) =>
-            cards.map((card, index) => `\n\t\t${index + 1}: ${card.name}`);
+            cards.map((card, index) => `\n\t\t${index + 1}: ${card}`);
         const deck = fprint(this.deck);
         const hand = fprint(this.hand);
         const row1 = fprint(this.row1);
