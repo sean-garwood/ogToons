@@ -6,93 +6,55 @@ import { Player } from './classes/Player';
 const DECKSIZE = 12;
 
 console.log('-------------------- Game Start --------------------');
-let player1 = new Player('Player 1', generateRandomDeck());
-let player2 = new Player('Player 2', generateRandomDeck());
-console.log(player1.toString());
-console.log(player2.toString());
+const player1 = new Player('Player 1', generateRandomDeck());
+const player2 = new Player('Player 2', generateRandomDeck());
 
-// TODO: shuffle each player's deck
+showGameState(player1, player2);
+
+// TODO: shuffle each player's deck; they won't always be random cards!
 
 // Cut Phase
 console.log('-------------------- Cut! --------------------');
 
 // The bottom card of each deck is revealed.
-console.log('Player 1 reveals', player1.bottomCard().toString());
-console.log('Player 2 reveals', player2.bottomCard().toString());
+const bottomCards = [player1.bottomCard(), player2.bottomCard()];
+for (let i = 0; i < 2; i++) {
+    console.log(
+        `${i === 0 ? player1.name : player2.name}'s bottom card is: ${bottomCards[i]}`,
+    );
+}
 
-// TODO: color cut logic
-// we need to determine the colors of the game
+// The colors of the bottom cards are compared.
+const gameColors = setGameColors(bottomCards[0], bottomCards[1]);
 
-// colors is an array that has zero to two members
-// REMEMBER: SILVER and BLACK are null colors; they can't be used to determine
-// the color of the game
+// each player draws a hand of six cards
+console.log('-------------------- Draw! --------------------');
+fillUpHands(player1, player2);
+showGameState(player1, player2);
 
 // Play Phase
 console.log('-------------------- Turn 1! --------------------');
-
-// each player draws a hand of six cards
-// the decks have already been shuffled and the card order should be determined, with deck[-1] being the bottom card
-
-// function drawHand(deck: Card[]) {
-//     const hand = [];
-//     for (let i = 0; i < 6; i++) {
-//         hand.push(drawTopCard(deck));
-//     }
-//     return hand;
-// }
-
-// player1.hand = drawHand(player1.deck);
-// player2.hand = drawHand(player2.deck);
-player1.fillHand();
-player2.fillHand();
-
-console.log(player1.toString());
-console.log(player2.toString());
-
-// turn 1 begins
 
 // each player places four cards onto the board. (the board has two sides, with two rows each: the first, or top, row has four slots, the latter has three.)
 // order will matter!
 
 // let's place the first four cards
-player1.playRow(1);
-player2.playRow(1);
-console.log(player1.toString());
-console.log(player2.toString());
-
-// TODO: Resolve turn 1
+playCards(player1, player2, 1);
 
 // Discard phase
 // Players can discard up to two cards from their hand
-player1.discard();
-player2.discard();
 
 // Phase 2
 console.log('-------------------- Turn 2! --------------------');
 
 // Draw cards so each player again has six in their hand
-player1.fillHand();
-player2.fillHand();
+playCards(player1, player2, 2);
 
-console.log(player1.toString());
-console.log(player2.toString());
-
-player1.playRow(2);
-player2.playRow(2);
-
-console.log(player1.toString());
-console.log(player2.toString());
-
+// TODO: color wins logic
 console.log('-------------------- Game over! --------------------');
 const winner = setWinner(player1, player2);
 console.log('The winner is... ', winner);
 showFinalScore(player1, player2);
-
-// TODO: End the game
-// The first two cards are revealed
-// Each player is then given the option to swap their last card with one of the three remaining cards in their own hand, at the cost of ten points
-// Then, the players choose the color for their silver cards in play
-// Then, once everything is resolved, the winner is determined.
 
 function makeCards(): Card[] {
     return cardData.map(
@@ -112,22 +74,63 @@ function generateRandomDeck(): Card[] {
     return deck;
 }
 
-function setWinner(p1: Player, p2: Player): string {
-    let winner;
+function getGameColors(color1: string, color2: string): string[] {
+    const colors = [];
+    const isNeitherSilverNorBlack = (color: string) =>
+        color !== 'Silver' && color !== 'Black';
+    if (isNeitherSilverNorBlack(color1)) {
+        colors.push(color1);
+    }
+    if (isNeitherSilverNorBlack(color2) && color2 !== color1) {
+        colors.push(color2);
+    }
+    console.log(
+        'The game colors are:',
+        colors.join(colors.length > 1 ? ' and ' : ''),
+    );
 
-    if (player1.score > player2.score) {
-        winner = player1.name;
-    } else if (player2.score > player1.score) {
-        winner = player2.name;
-    } else {
-        winner = 'nobody!';
+    return colors;
+}
+
+function setGameColors(bottomCard1: Card, bottomCard2: Card): string[] {
+    const color1 = bottomCard1.color;
+    const color2 = bottomCard2.color;
+    const colors = getGameColors(color1, color2);
+
+    return colors;
+}
+
+function setWinner(p1: Player, p2: Player): string {
+    if (p1.score === p2.score) {
+        return 'nobody!';
     }
 
-    return winner;
+    return p1.score > player2.score ? p1.name : p2.name;
 }
 
 function showFinalScore(p1: Player, p2: Player): void {
     console.log('-------------------- Final Score --------------------');
     console.log(`${p1.name}: ${p1.score}`);
     console.log(`${p2.name}: ${p2.score}`);
+}
+
+function fillUpHands(p1: Player, p2: Player): void {
+    p1.fillHand();
+    p2.fillHand();
+}
+
+function playCards(p1: Player, p2: Player, row: number): void {
+    p1.playRow(row);
+    p2.playRow(row);
+    if (row === 1) {
+        p1.discard();
+        p2.discard();
+        fillUpHands(p1, p2);
+    }
+    showGameState(player1, player2);
+}
+
+function showGameState(p1: Player, p2: Player): void {
+    console.log(p1.toString());
+    console.log(p2.toString());
 }
