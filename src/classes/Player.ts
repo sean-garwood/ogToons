@@ -44,10 +44,12 @@ class Player {
     }
 
     toString() {
-        const deck = this.deck.map((card) => card.name).join(', ');
-        const hand = this.hand.map((card) => card.name).join(', ');
-        const row1 = this.row1.map((card) => card.name).join(', ');
-        const row2 = this.row2.map((card) => card.name).join(', ');
+        const fprint = (cards: Card[]) =>
+            cards.map((card, index) => `\n\t\t${index + 1}: ${card.name}`);
+        const deck = fprint(this.deck);
+        const hand = fprint(this.hand);
+        const row1 = fprint(this.row1);
+        const row2 = fprint(this.row2);
         return `${this.name}:\n\tDeck: ${deck}\n\tHand: ${hand}\n\tRow 1: ${row1}\n\tRow 2: ${row2}`;
     }
 
