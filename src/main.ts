@@ -5,22 +5,6 @@ import { Player } from './classes/Player';
 // Let's generate two random decks
 const DECKSIZE = 12;
 
-function makeCards(): Card[] {
-    return cardData.map(
-        (card: any) => new Card(card.name, card.color, card.points),
-    );
-}
-
-function generateRandomDeck(): Card[] {
-    const deck: Card[] = [];
-    const cards: Card[] = makeCards();
-    for (let i = 0; i < DECKSIZE; i++) {
-        const thisCard = cards[Math.floor(Math.random() * cards.length)];
-        deck.push(thisCard);
-    }
-    return deck;
-}
-
 console.log('-------------------- Game Start --------------------');
 let player1 = new Player('Player 1', generateRandomDeck());
 let player2 = new Player('Player 2', generateRandomDeck());
@@ -99,8 +83,51 @@ player2.playRow(2);
 console.log(player1.toString());
 console.log(player2.toString());
 
+console.log('-------------------- Game over! --------------------');
+const winner = setWinner(player1, player2);
+console.log('The winner is... ', winner);
+showFinalScore(player1, player2);
+
 // TODO: End the game
 // The first two cards are revealed
 // Each player is then given the option to swap their last card with one of the three remaining cards in their own hand, at the cost of ten points
 // Then, the players choose the color for their silver cards in play
 // Then, once everything is resolved, the winner is determined.
+
+function makeCards(): Card[] {
+    return cardData.map(
+        (card: any) => new Card(card.name, card.color, card.points),
+    );
+}
+
+function generateRandomDeck(): Card[] {
+    const deck: Card[] = [];
+    const cards: Card[] = makeCards();
+
+    for (let i = 0; i < DECKSIZE; i++) {
+        const thisCard = cards[Math.floor(Math.random() * cards.length)];
+        deck.push(thisCard);
+    }
+
+    return deck;
+}
+
+function setWinner(p1: Player, p2: Player): string {
+    let winner;
+
+    if (player1.score > player2.score) {
+        winner = player1.name;
+    } else if (player2.score > player1.score) {
+        winner = player2.name;
+    } else {
+        winner = 'nobody!';
+    }
+
+    return winner;
+}
+
+function showFinalScore(p1: Player, p2: Player): void {
+    console.log('-------------------- Final Score --------------------');
+    console.log(`${p1.name}: ${p1.score}`);
+    console.log(`${p2.name}: ${p2.score}`);
+}

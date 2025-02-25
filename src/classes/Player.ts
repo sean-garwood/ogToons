@@ -24,14 +24,6 @@ class Player {
         this.#discardRandom();
     }
 
-    drawTopCard(deckOrHand: Card[]): Card {
-        const card = deckOrHand.shift();
-        if (!card) {
-            throw new Error('The deck is empty, cannot draw a card.');
-        }
-        return card;
-    }
-
     fillHand() {
         this.hand.push(...this.deck.splice(0, 6 - this.hand.length));
     }
@@ -40,7 +32,7 @@ class Player {
         const slots = row === 1 ? 4 : 3;
         const rowArray = row === 1 ? this.row1 : this.row2;
         for (let i = 0; i < slots; i++) {
-            rowArray.push(this.drawTopCard(this.hand));
+            rowArray.push(this.#drawTopCard(this.hand));
         }
         this.score += this.#scoreRow(row);
     }
@@ -62,15 +54,23 @@ class Player {
         }
     }
 
+    #drawTopCard(deckOrHand: Card[]): Card {
+        const card = deckOrHand.shift();
+        if (!card) {
+            throw new Error('The deck is empty, cannot draw a card.');
+        }
+        return card;
+    }
+
     #scoreRow(row: number): number {
         const rowArray = row === 1 ? this.row1 : this.row2;
-        let rowScore = 0;
+        let score = 0;
 
         for (const card of rowArray) {
-            rowScore += card.points;
+            score += card.points;
         }
 
-        return rowScore;
+        return score;
     }
 }
 
