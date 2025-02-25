@@ -8,6 +8,7 @@ class Player {
     constructor(
         public name: string,
         public deck: Card[],
+        public score: number = 0,
     ) {
         this.row1 = [];
         this.row2 = [];
@@ -41,17 +42,7 @@ class Player {
         for (let i = 0; i < slots; i++) {
             rowArray.push(this.drawTopCard(this.hand));
         }
-    }
-
-    scoreRow(row: number): number {
-        const rowArray = row === 1 ? this.row1 : this.row2;
-        let score = 0;
-
-        for (const card of rowArray) {
-            score += card.points;
-        }
-
-        return score;
+        this.score += this.#scoreRow(row);
     }
 
     toString() {
@@ -61,7 +52,7 @@ class Player {
         const hand = fprint(this.hand);
         const row1 = fprint(this.row1);
         const row2 = fprint(this.row2);
-        return `${this.name}:\n\tDeck: ${deck}\n\tHand: ${hand}\n\tRow 1: ${row1}\n\tRow 2: ${row2}`;
+        return `${this.name}:\n\tDeck: ${deck}\n\tHand: ${hand}\n\tRow 1: ${row1}\n\tRow 2: ${row2}\n\tScore: ${this.score}`;
     }
 
     #discardRandom() {
@@ -69,6 +60,17 @@ class Player {
         for (let i = 0; i < numDiscards; i++) {
             this.hand.shift();
         }
+    }
+
+    #scoreRow(row: number): number {
+        const rowArray = row === 1 ? this.row1 : this.row2;
+        let rowScore = 0;
+
+        for (const card of rowArray) {
+            rowScore += card.points;
+        }
+
+        return rowScore;
     }
 }
 

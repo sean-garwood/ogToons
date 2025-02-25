@@ -33,8 +33,8 @@ console.log(player2.toString());
 console.log('-------------------- Cut! --------------------');
 
 // The bottom card of each deck is revealed.
-console.log('Player 1 reveals', player1.bottomCard().name);
-console.log('Player 2 reveals', player2.bottomCard().name);
+console.log('Player 1 reveals', player1.bottomCard().toString());
+console.log('Player 2 reveals', player2.bottomCard().toString());
 
 // TODO: color cut logic
 // we need to determine the colors of the game
