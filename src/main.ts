@@ -61,8 +61,8 @@ console.log(player2.toString());
 // order will matter!
 
 // let's place the first four cards
-player1.playRow1();
-player2.playRow1();
+player1.playRow(1);
+player2.playRow(1);
 console.log(player1.toString());
 console.log(player2.toString());
 
@@ -83,8 +83,8 @@ player2.fillHand();
 console.log(player1.toString());
 console.log(player2.toString());
 
-player1.playRow2();
-player2.playRow2();
+player1.playRow(2);
+player2.playRow(2);
 
 console.log(player1.toString());
 console.log(player2.toString());
